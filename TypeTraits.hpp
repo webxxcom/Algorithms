@@ -1,11 +1,7 @@
-#pragma once
 #include "stdafx.h"
 
 namespace alg
 {
-
-#pragma region Checkings
-
 	struct identity {
 		using is_transparent = void;
 
@@ -92,7 +88,7 @@ namespace alg
 	struct enable_if { };
 
 	template<typename _Ty>
-	struct enable_if<true, _Ty> { 
+	struct enable_if<true, _Ty> {
 		using type = _Ty;
 	};
 
@@ -112,9 +108,9 @@ namespace alg
 	template<bool _Test, typename _Ty1, typename _Ty2>
 	using conditionals_t = conditionals<_Test, _Ty1, _Ty2>::type;
 
-	//_Ty is not a value if it's void
+	//_Ty is not an object if it's a void
 	template<typename _Ty>
-	concept Object =  !alg::is_void_v<_Ty>;
+	concept Object = !alg::is_void_v<_Ty>;
 	//!!!!VOID CAN BE A POINTER OR REFERENCE!!
 
 	template<typename _From, typename _To>
@@ -153,10 +149,6 @@ namespace alg
 	template<typename _Ty>
 	concept FunctionType = is_function_v<_Ty>;
 
-#pragma endregion 
-
-#pragma region Algorithms
-
 	template<typename _Ty>
 	struct remove_reference {
 		using type = _Ty;
@@ -173,68 +165,5 @@ namespace alg
 	};
 
 	template<typename _Ty>
-	using remove_reference_t = remove_reference<_Ty>::type;
-
-	template<typename _Ty>
-	remove_reference_t<_Ty>&& move(_Ty&& _Val);
-
-	template<_Input_Iterator _Ty>
-	void _is_valid(_Ty const _l, _Ty const _r);
-
-	template<_Input_Iterator InIt, FunctionType _Foo>
-	InIt _Find_Unchecked_If(InIt _First, const InIt _Last, _Foo _Pred);
-	
-	template<_Input_Iterator InIt, Object _Val>
-	InIt _Find_Unchecked(InIt _First, const InIt _Last, _Val const& _val);
-
-	template<_Input_Iterator InIt, Object _Val>
-	bool _Contains_Unchecked(InIt _First, InIt const _Last, _Val _val);
-
-	template<Object _Val, _Output_Iterator<_Val> OutIt>
-	OutIt _Replace_Unchecked(OutIt _First, OutIt _Last, _Val _Old_Value, _Val _New_Value);
-
-	template<Object _Val, _Output_Iterator<_Val> OutIt, FunctionType _Foo>
-	OutIt _Replace_Unchecked_If(OutIt _First, OutIt _Last, _Foo _Pred, _Val _New_Value);
-
-	template<_Input_Iterator InIt, Object _Val>
-	InIt find(InIt _First, const InIt _Last, _Val const& _val);
-
-	template<_Input_Iterator InIt, Object _Val>
-	InIt find_last(InIt _First, InIt const _Last, _Val const _val);
-
-	template<_Input_Iterator InIt, typename _Foo>
-	InIt find_if(InIt _First, InIt const _Last, _Foo foo);
-
-	template<_Input_Iterator InIt, typename _Foo>
-	InIt find_if_not(InIt _First, InIt const _Last, _Foo foo);
-
-	template<_Input_Iterator InIt1, _Input_Iterator InIt2>
-	InIt1 find_first_of(InIt1 _First1, InIt1 const _Last1, InIt2 const _First2, InIt2 const _Last2);
-
-	template<_Input_Iterator InIt, Object _Val>
-	bool contains(InIt _First, InIt const _Last, _Val _val);
-
-	template<Object _Val, _Output_Iterator<_Val> OutIt>
-	OutIt replace(OutIt _First, OutIt const _Last, _Val const& _Old_Value, _Val const& _New_Value);
-
-	template<Object _Val, _Output_Iterator<_Val> OutIt, FunctionType _Foo>
-	OutIt replace_if(OutIt _First, OutIt const _Last, _Foo _Pred, _Val const& _New_Value);
-
-	template<_Input_Iterator InIt1, _Input_Iterator InIt2>
-	bool equal(InIt1 _First1, InIt1 _Last1, InIt2 _First2, InIt2 _Last2);
-
-	template<_Input_Iterator InIt1, _Input_Iterator InIt2>
-	bool equal(InIt1 _First1, InIt1 _Last1, InIt2 _First2);
-
-	template<_Input_Iterator InIt, _Output_Iterator<typename InIt::value_type> OutIt>
-	void move(InIt _First, InIt const _Last, OutIt _DFirst);
-
-	template<_Input_Iterator InIt, typename _Val>
-	_Val accumulate(InIt _First, InIt const _Last, _Val _val = _Val());
-
-#pragma endregion 
-
-
-
-
+	using remove_reference_t = typename remove_reference<_Ty>::type;
 }

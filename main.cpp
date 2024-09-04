@@ -1,5 +1,5 @@
 #include "stdafx.h"
-#include "Algorithms.cpp"
+#include "Algorithms.hpp"
 #include "stdafx.cpp"
 
 int main()

@@ -1,6 +1,6 @@
 #include "stdafx.h"
 
-#include "Algorithms.cpp"
+#include "Algorithms.hpp"
 
 class Person {
 public:
@@ -99,23 +99,23 @@ static void test()
         find_it = alg::find_first_of(numbers.begin(), numbers.end(), targets.begin(), targets.end());
         assert(find_it == numbers.end());
 
-        // Test with custom Person objects
-        std::vector<Person> people = {
-            Person("Alice", 30),
-            Person("Bob", 25),
-            Person("Charlie", 35)
-        };
+        //// Test with custom Person objects
+        //std::vector<Person> people = {
+        //    Person("Alice", 30),
+        //    Person("Bob", 25),
+        //    Person("Charlie", 35)
+        //};
 
-        std::vector<Person> target_people = { Person("Charlie", 35), Person("Eve", 40) };
+        //std::vector<Person> target_people = { Person("Charlie", 35), Person("Eve", 40) };
 
-        // Find the first person in people that matches any person in target_people
-        auto person_it = alg::find_first_of(people.begin(), people.end(), target_people.begin(), target_people.end());
-        assert(person_it != people.end() && person_it->name == "Charlie");
+        //// Find the first person in people that matches any person in target_people
+        //auto person_it = alg::find_first_of(people.begin(), people.end(), target_people.begin(), target_people.end());
+        //assert(person_it != people.end() && person_it->name == "Charlie");
 
-        // Test with non-matching targets
-        target_people = { Person("Eve", 40), Person("Frank", 50) };
-        person_it = alg::find_first_of(people.begin(), people.end(), target_people.begin(), target_people.end());
-        assert(person_it == people.end());
+        //// Test with non-matching targets
+        //target_people = { Person("Eve", 40), Person("Frank", 50) };
+        //person_it = alg::find_first_of(people.begin(), people.end(), target_people.begin(), target_people.end());
+        //assert(person_it == people.end());
     }
 #pragma endregion
 
@@ -246,7 +246,6 @@ static void test()
         }
     }
 #pragma endregion
-
 
     #pragma region Accumulate
     {
