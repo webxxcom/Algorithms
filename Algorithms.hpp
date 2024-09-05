@@ -10,14 +10,19 @@ namespace alg
 	}
 
 	template<_Input_Iterator _Ty>
-	void _is_valid(_Ty const _l, _Ty const _r)
+	constexpr void _is_valid(_Ty const _l, _Ty const _r) noexcept
 	{
-		if (_l > _r)
-			throw std::runtime_error("The iterators should be valid to traverse through");
+		if constexpr(alg::is_pointer_v<_Ty>){
+			static_assert(_l <= _r, "The iterators should be valid to traverse through");
+		} else {
+			if (_l > _r) {
+				std::abort();
+			}
+		}
 	}
 
 	template<_Input_Iterator InIt, FunctionType _Foo>
-	InIt _Find_Unchecked_If(InIt _First, const InIt _Last, _Foo _Pred)
+	constexpr InIt _Find_Unchecked_If(InIt _First, const InIt _Last, _Foo _Pred)
 	{
 		//_FIRST CAN BE PASSED AS CONST
 		for (; _First != _Last; ++_First)
@@ -28,7 +33,7 @@ namespace alg
 	}
 	
 	template<_Input_Iterator InIt, Object _Val>
-	InIt _Find_Unchecked(InIt _First, const InIt _Last, _Val const& _val)
+	constexpr InIt _Find_Unchecked(InIt _First, const InIt _Last, _Val const& _val)
 	{
 		//_FIRST CAN BE PASSED AS CONST
 		for (; _First != _Last; ++_First)
@@ -39,7 +44,7 @@ namespace alg
 	}
 
 	template<_Input_Iterator InIt, Object _Val>
-	bool _Contains_Unchecked(InIt _First, InIt const _Last, _Val _val)
+	constexpr bool _Contains_Unchecked(InIt _First, InIt const _Last, _Val _val)
 	{
 		for (; _First != _Last; ++_First)
 			if (*_First == _val)
@@ -49,7 +54,7 @@ namespace alg
 	}
 
 	template<Object _Val, _Output_Iterator<_Val> OutIt>
-	OutIt _Replace_Unchecked(OutIt _First, OutIt _Last, _Val _Old_Value, _Val _New_Value)
+	constexpr OutIt _Replace_Unchecked(OutIt _First, OutIt _Last, _Val _Old_Value, _Val _New_Value)
 	{
 		for (; _First != _Last; ++_First)
 			if (*_First == _Old_Value)
@@ -59,7 +64,7 @@ namespace alg
 	}
 
 	template<Object _Val, _Output_Iterator<_Val> OutIt, FunctionType _Foo>
-	OutIt _Replace_Unchecked_If(OutIt _First, OutIt _Last, _Foo _Pred, _Val _New_Value)
+	constexpr OutIt _Replace_Unchecked_If(OutIt _First, OutIt _Last, _Foo _Pred, _Val _New_Value)
 	{
 		for (; _First != _Last; ++_First)
 			if (_Pred(*_First))
@@ -69,7 +74,7 @@ namespace alg
 	}
 
 	template<_Input_Iterator InIt, Object _Val>
-	InIt find(InIt _First, const InIt _Last, _Val const& _val) 
+	constexpr InIt find(InIt _First, const InIt _Last, _Val const& _val)
 	{
 		_is_valid(_First, _Last);
 
@@ -77,11 +82,11 @@ namespace alg
 	}
 
 	template<_Input_Iterator InIt, Object _Val>
-	InIt find_last(InIt _First, InIt const _Last, _Val const _val)
+	constexpr InIt find_last(InIt _First, InIt const _Last, _Val const _val)
 	{
 		_is_valid(_First, _Last);
 
-		auto _last_found = _Last;
+		InIt _last_found = _Last;
 		for (; _First != _Last; ++_First)
 			if (*_First == _val)
 				_last_found = _First;
@@ -90,7 +95,7 @@ namespace alg
 	}
 
 	template<_Input_Iterator InIt, typename _Foo>
-	InIt find_if(InIt _First, InIt const _Last, _Foo _Pred)
+	constexpr InIt find_if(InIt _First, InIt const _Last, _Foo _Pred)
 	{
 		_is_valid(_First, _Last);
 
@@ -98,7 +103,7 @@ namespace alg
 	}
 
 	template<_Input_Iterator InIt, typename _Foo>
-	InIt find_if_not(InIt _First, InIt const _Last, _Foo _Pred)
+	constexpr InIt find_if_not(InIt _First, InIt const _Last, _Foo _Pred)
 	{
 		_is_valid(_First, _Last);
 
@@ -110,7 +115,7 @@ namespace alg
 	}
 
 	template<_Input_Iterator InIt1, _Input_Iterator InIt2>
-	InIt1 find_first_of(InIt1 _First1, InIt1 const _Last1, InIt2 const _First2, InIt2 const _Last2)
+	constexpr InIt1 find_first_of(InIt1 _First1, InIt1 const _Last1, InIt2 const _First2, InIt2 const _Last2)
 	{
 		_is_valid(_First1, _Last1);
 		_is_valid(_First2, _Last2);
@@ -123,7 +128,7 @@ namespace alg
 	}
 
 	template<_Input_Iterator InIt, Object _Val>
-	bool contains(InIt _First, InIt const _Last, _Val _val) 
+	constexpr bool contains(InIt _First, InIt const _Last, _Val _val)
 	{
 		_is_valid(_First, _Last);
 
@@ -131,7 +136,7 @@ namespace alg
 	}
 
 	template<Object _Val, _Output_Iterator<_Val> OutIt>
-	OutIt replace(OutIt _First, OutIt const _Last, _Val const& _Old_Value, _Val const& _New_Value)
+	constexpr OutIt replace(OutIt _First, OutIt const _Last, _Val const& _Old_Value, _Val const& _New_Value)
 	{
 		_is_valid(_First, _Last);
 
@@ -139,7 +144,7 @@ namespace alg
 	}
 
 	template<Object _Val, _Output_Iterator<_Val> OutIt, FunctionType _Foo>
-	OutIt replace_if(OutIt _First, OutIt const _Last, _Foo _Pred, _Val const& _New_Value)
+	constexpr OutIt replace_if(OutIt _First, OutIt const _Last, _Foo _Pred, _Val const& _New_Value)
 	{
 		_is_valid(_First, _Last);
 
@@ -147,7 +152,7 @@ namespace alg
 	}
 
 	template<_Input_Iterator InIt1, _Input_Iterator InIt2>
-	bool equal(InIt1 _First1, InIt1 _Last1, InIt2 _First2, InIt2 _Last2)
+	constexpr bool equal(InIt1 _First1, InIt1 _Last1, InIt2 _First2, InIt2 _Last2)
 	{
 		_is_valid(_First1, _Last1);
 		_is_valid(_First2, _Last2);
@@ -164,7 +169,7 @@ namespace alg
 	}
 
 	template<_Input_Iterator InIt1, _Input_Iterator InIt2>
-	bool equal(InIt1 _First1, InIt1 _Last1, InIt2 _First2)
+	constexpr bool equal(InIt1 _First1, InIt1 _Last1, InIt2 _First2)
 	{
 		_is_valid(_First1, _Last1);
 
@@ -178,7 +183,7 @@ namespace alg
 	}
 
 	template<_Input_Iterator InIt, _Output_Iterator<typename InIt::value_type> OutIt>
-	void move(InIt _First, InIt const _Last, OutIt _DFirst)
+	constexpr void move(InIt _First, InIt const _Last, OutIt _DFirst)
 	{
 		_is_valid(_First, _Last);
 
@@ -187,7 +192,7 @@ namespace alg
 	}
 
 	template<_Input_Iterator InIt, typename _Val>
-	_Val accumulate(InIt _First, InIt const _Last, _Val _val = _Val())
+	constexpr _Val accumulate(InIt _First, InIt const _Last, _Val _val = _Val())
 	{
 		_is_valid(_First, _Last);
 
@@ -196,5 +201,26 @@ namespace alg
 			_sum = _sum + *_First;
 
 		return _sum;
+	}
+
+	template<_Input_Iterator InIt, FunctionType _Pred>
+	constexpr InIt adjacent_find(InIt _First, InIt const _Last, _Pred _pred)
+	{
+		_is_valid(_First, _Last);
+
+		InIt next = _First;
+		++_First;
+
+		for (; _First != _Last; ++_First, ++next)
+			if (_pred(*next, *_First))
+				break;
+
+		return _First;
+	}
+
+	template<_Input_Iterator InIt>
+	constexpr InIt adjacent_find(InIt _First, InIt const _Last)
+	{
+		return adjacent_find(_First, _Last, alg::equal_to());
 	}
 }

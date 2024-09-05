@@ -75,6 +75,15 @@ namespace alg
 	inline static constexpr bool is_reference_v<_Ty&&> = true;
 
 	template<typename _Ty>
+	inline static constexpr bool is_pointer_v = false;
+
+	template<typename _Ty>
+	inline static constexpr bool is_pointer_v<_Ty*> = true;
+
+	template<typename _Ty>
+	inline static constexpr bool is_pointer_v<_Ty const*> = true;
+
+	template<typename _Ty>
 	struct is_reference : bool_constant<is_reference_v<_Ty>> {};
 
 	template<typename _Ty>
@@ -107,6 +116,15 @@ namespace alg
 
 	template<bool _Test, typename _Ty1, typename _Ty2>
 	using conditionals_t = conditionals<_Test, _Ty1, _Ty2>::type;
+
+	struct equal_to {
+		template<class _Ty1, class _Ty2>
+		constexpr auto operator()(_Ty1&& _Left, _Ty2&& _Right) const
+			noexcept(noexcept(std::forward<_Ty1>(_Left) == std::forward<_Ty2>(_Right)))
+		-> decltype(std::forward<_Ty1>(_Left) == std::forward<_Ty2>(_Right)) {
+			return std::forward<_Ty1>(_Left) == std::forward<_Ty2>(_Right);
+		}
+	};
 
 	//_Ty is not an object if it's a void
 	template<typename _Ty>

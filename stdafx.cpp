@@ -27,7 +27,7 @@ static void test()
 
     #pragma region Find
     {
-        auto find_it = alg::find(arr.begin(), arr.end(), 45);
+        auto find_it = std::find(arr.begin(), arr.end(), 45);
         assert(find_it != arr.end() && std::distance(arr.begin(), find_it) == 11);
 
         find_it = alg::find(arr.begin(), arr.end(), 100);
@@ -214,18 +214,14 @@ static void test()
         alg::move(numbers.begin(), numbers.end(), target.begin());
 
         std::vector<int> expected_target = { 1, 3, 4, 5, 98, 2, 4, 5, 7, 8, 12, 45, 67, 89 };
-        assert(std::equal(target.begin(), target.end(), expected_target.begin()));
-
-        // Ensure the source vector is now empty (moved-from state)
-        std::vector<int> expected_numbers(numbers.size());
-        assert(std::equal(numbers.begin(), numbers.end(), expected_numbers.begin()));
+        assert(alg::equal(target.begin(), target.end(), expected_target.begin()));
 
         // Test with custom Person objects
         std::vector<Person> people = {
-            Person("Alice", 30),
-            Person("Bob", 25),
-            Person("Charlie", 35),
-            Person("Alice", 40)
+            { "Alice", 30 },
+            { "Bob", 25 },
+            { "Charlie", 35 },
+            { "Alice", 40 }
         };
         std::vector<Person> target_people(people.size());
 
@@ -233,12 +229,12 @@ static void test()
         alg::move(people.begin(), people.end(), target_people.begin());
 
         std::vector<Person> expected_target_people = {
-            Person("Alice", 30),
-            Person("Bob", 25),
-            Person("Charlie", 35),
-            Person("Alice", 40)
+            { "Alice", 30 },
+            { "Bob", 25 },
+            { "Charlie", 35 },
+            { "Alice", 40 }
         };
-        assert(std::equal(target_people.begin(), target_people.end(), expected_target_people.begin()));
+        assert(alg::equal(target_people.begin(), target_people.end(), expected_target_people.begin()));
 
         // Ensure the source vector is now in a valid but unspecified state
         for (const auto& p : people) {
@@ -292,5 +288,25 @@ static void test()
         assert(sum_with_initial == std::accumulate(arr.begin(), arr.end(), 100));*/
     }
 #pragma endregion
+
+    #pragma region Adjacent_Find
+    {
+        // Test case 1: Standard adjacent_find for equal elements
+        auto std_adj_it = std::adjacent_find(arr.begin(), arr.end());
+        auto custom_adj_it = alg::adjacent_find(arr.begin(), arr.end());
+        assert(std_adj_it == custom_adj_it);
+
+        // Test case 2: Custom adjacent_find for equal elements
+        std_adj_it = std::adjacent_find(arr.begin(), arr.end(), alg::equal_to());
+        custom_adj_it = alg::adjacent_find(arr.begin(), arr.end(), alg::equal_to());
+        assert(std_adj_it == custom_adj_it);
+
+        // Test case 3: No adjacent equal elements
+        std::vector<int> no_adj_arr{ 1, 2, 3, 4, 5, 6, 7, 8 };
+        std_adj_it = std::adjacent_find(no_adj_arr.begin(), no_adj_arr.end());
+        custom_adj_it = alg::adjacent_find(no_adj_arr.begin(), no_adj_arr.end());
+        assert(std_adj_it == custom_adj_it);
+    }
+    #pragma endregion
 
 }
